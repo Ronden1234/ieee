@@ -1,0 +1,31 @@
+{
+  "summary": "Frontend-only test of the static Jekyll site IEEE CYB Conf 2027 (/app/cybconf). A crawler checked 13 pages: every page returned 200, no internal assets or links were broken (CSS background images included), and every nav anchor ID (#theme-topics, #regular-topics, #important-dates, #paper-types, #tpc, #tourism, #cuisine, #food-gallery) exists. Playwright on desktop (1920): the home hero, theme, dates, key dates card (Jan 15 / Mar 1 / Mar 31 / Mar 31 2027), Topics, Scientific Program, Discover Calabria, Organizing Committee (placeholder avatars render), Calabria conferences archive, venue and sponsors all render. All 39 home images load. All 5 dropdowns open with the expected items. No JS page errors. Mobile (390): the toggler opens the collapse, the Attending dropdown expands, the Registration link navigates, and there is no horizontal overflow on 7 pages. Fixed one bug: the 'Motion & Control' topic card had no icon.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Home Topics Covered - Motion & Control card", "issue": "Icon did not render. bi-person-walking does not exist in Bootstrap Icons 1.10.5, the version loaded in _layouts/default.html. FIXED by switching to bi-arrows-move.", "selector": ".topic-card i.bi", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Footer", "issues": ["Copyright reads '© 2026 IEEE International Conference on Cybernetics 2027' (site.time year). This may look inconsistent; consider hardcoding it or dropping the year."]},
+      {"screen": "Contact hero", "issues": ["custom-index.css .contact-hero uses /assets/images/Digital_Twin_Calgary.jpg, which looks like a leftover from a previous conference. Consider a Calabria/UNICAL image."]},
+      {"screen": "Home welcome text (mobile)", "issues": ["Justified paragraph text leaves large word gaps at 390px. Consider text-align:left on mobile (inherited from the original site)."]}
+    ]
+  },
+  "test_report_links": ["/app/tests/crawl_check.py"],
+  "action_items": [
+    "Optional: replace the Calgary image in the .contact-hero background",
+    "Optional: adjust the footer copyright year",
+    "Optional: left-align the justified text on mobile"
+  ],
+  "critical_code_review_comments": [
+    "The only 'SWC 2026' text left is in the home 'Conferences Organized in Calabria & Italy' archive card (IEEE SWC 2026, link to swc-ieee-2026.github.io). This is intentional past-conference content.",
+    "_data/swc_data.json is still in the repo, possibly unused; consider removing it."
+  ],
+  "updated_files": ["/app/cybconf/index.html"],
+  "success_rate": {"backend": "N/A", "frontend": "100% (after the 1 minor icon fix)"},
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Static Jekyll site served on port 3000. Run python /app/tests/crawl_check.py to check status, assets, links and leftover SWC text. The site has no data-testids; use text/CSS selectors (.navbar-toggler, nav .dropdown-toggle, a.dropdown-item)."
+}
